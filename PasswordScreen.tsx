@@ -1,0 +1,112 @@
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
+
+const PasswordScreen = ({ navigation }: any) => {
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // --- FONCTION DE RÉCUPÉRATION ---
+  const handleReset = async () => {
+    if (!email) {
+      Alert.alert("Erreur", "Entrez votre email.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // On utilise l'adresse IP de ton PC et la route /password
+      const response = await fetch('http://192.168.1.82:5000/api/auth/password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.toLowerCase().trim() }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert("Succès", "Lien envoyé ! Vérifiez vos emails.");
+        navigation.navigate('Login'); // Retourne à la page de connexion
+      } else {
+        // Affiche l'erreur venant du backend (ex: "Utilisateur inconnu.")
+        Alert.alert("Erreur", data.message || "Une erreur est survenue.");
+      }
+    } catch (error) {
+      Alert.alert("Erreur réseau", "Serveur injoignable (Vérifiez votre connexion et le port 5000)");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Récupération</Text>
+      
+      <TextInput 
+        style={styles.input} 
+        placeholder="votre@email.com" 
+        value={email}
+        onChangeText={setEmail}
+        autoCapitalize="none"
+        keyboardType="email-address"
+        placeholderTextColor="#999"
+      />
+
+      <TouchableOpacity 
+        style={styles.button} 
+        onPress={handleReset} 
+        disabled={loading}
+      >
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.buttonText}>Envoyer le lien</Text>
+        )}
+      </TouchableOpacity>
+
+      {/* Optionnel : Bouton pour annuler et revenir en arrière */}
+      <TouchableOpacity 
+        onPress={() => navigation.goBack()} 
+        style={{ marginTop: 20 }}
+      >
+        <Text style={{ color: '#0055FF', textAlign: 'center' }}>Annuler</Text>
+      </TouchableOpacity>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: { 
+    flex: 1, 
+    justifyContent: 'center', 
+    padding: 20, 
+    backgroundColor: '#fff' 
+  },
+  title: { 
+    fontSize: 24, 
+    fontWeight: 'bold', 
+    marginBottom: 20, 
+    textAlign: 'center', 
+    color: '#0055FF' 
+  },
+  input: { 
+    borderWidth: 1, 
+    borderColor: '#ddd', 
+    padding: 15, 
+    borderRadius: 10, 
+    marginBottom: 20,
+    color: '#000'
+  },
+  button: { 
+    backgroundColor: '#FF0000', 
+    padding: 15, 
+    borderRadius: 10, 
+    alignItems: 'center' 
+  },
+  buttonText: { 
+    color: '#fff', 
+    fontWeight: 'bold',
+    fontSize: 16
+  }
+});
+
+export default PasswordScreen;

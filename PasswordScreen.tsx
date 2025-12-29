@@ -5,7 +5,6 @@ const PasswordScreen = ({ navigation }: any) => {
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // --- FONCTION DE RÉCUPÉRATION ---
   const handleReset = async () => {
     if (!email) {
       Alert.alert("Erreur", "Entrez votre email.");
@@ -14,7 +13,7 @@ const PasswordScreen = ({ navigation }: any) => {
 
     setLoading(true);
     try {
-      // On utilise l'adresse IP de ton PC et la route /password
+      
       const response = await fetch('http://192.168.1.82:5000/api/auth/password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -25,13 +24,12 @@ const PasswordScreen = ({ navigation }: any) => {
 
       if (response.ok) {
         Alert.alert("Succès", "Lien envoyé ! Vérifiez vos emails.");
-        navigation.navigate('Login'); // Retourne à la page de connexion
+        navigation.navigate('Login');
       } else {
-        // Affiche l'erreur venant du backend (ex: "Utilisateur inconnu.")
-        Alert.alert("Erreur", data.message || "Une erreur est survenue.");
+        Alert.alert("Erreur", data.message || "Utilisateur inconnu.");
       }
     } catch (error) {
-      Alert.alert("Erreur réseau", "Serveur injoignable (Vérifiez votre connexion et le port 5000)");
+      Alert.alert("Erreur réseau", "Serveur injoignable (Vérifiez le port 5000)");
     } finally {
       setLoading(false);
     }
@@ -40,7 +38,6 @@ const PasswordScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Récupération</Text>
-      
       <TextInput 
         style={styles.input} 
         placeholder="votre@email.com" 
@@ -48,65 +45,20 @@ const PasswordScreen = ({ navigation }: any) => {
         onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
-        placeholderTextColor="#999"
       />
-
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={handleReset} 
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.buttonText}>Envoyer le lien</Text>
-        )}
-      </TouchableOpacity>
-
-      {/* Optionnel : Bouton pour annuler et revenir en arrière */}
-      <TouchableOpacity 
-        onPress={() => navigation.goBack()} 
-        style={{ marginTop: 20 }}
-      >
-        <Text style={{ color: '#0055FF', textAlign: 'center' }}>Annuler</Text>
+      <TouchableOpacity style={styles.button} onPress={handleReset} disabled={loading}>
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Envoyer le lien</Text>}
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    justifyContent: 'center', 
-    padding: 20, 
-    backgroundColor: '#fff' 
-  },
-  title: { 
-    fontSize: 24, 
-    fontWeight: 'bold', 
-    marginBottom: 20, 
-    textAlign: 'center', 
-    color: '#0055FF' 
-  },
-  input: { 
-    borderWidth: 1, 
-    borderColor: '#ddd', 
-    padding: 15, 
-    borderRadius: 10, 
-    marginBottom: 20,
-    color: '#000'
-  },
-  button: { 
-    backgroundColor: '#FF0000', 
-    padding: 15, 
-    borderRadius: 10, 
-    alignItems: 'center' 
-  },
-  buttonText: { 
-    color: '#fff', 
-    fontWeight: 'bold',
-    fontSize: 16
-  }
+  container: { flex: 1, justifyContent: 'center', padding: 20, backgroundColor: '#fff' },
+  title: { fontSize: 24, fontWeight: 'bold', marginBottom: 20, textAlign: 'center', color: '#0055FF' },
+  input: { borderWidth: 1, borderColor: '#ddd', padding: 15, borderRadius: 10, marginBottom: 20 },
+  button: { backgroundColor: '#FF0000', padding: 15, borderRadius: 10, alignItems: 'center' },
+  buttonText: { color: '#fff', fontWeight: 'bold' }
 });
 
 export default PasswordScreen;

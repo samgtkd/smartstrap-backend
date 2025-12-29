@@ -11,7 +11,7 @@ export default function SignupScreen({ navigation }: any) {
   const [rpps, setRpps] = useState('');
   const [specialite, setSpecialite] = useState('');
 
-  // --- LOGIQUE DE VALIDATION ---
+ 
   const isFormValid = () => {
     const commonFields = nom.length > 0 && prenom.length > 0 && email.length > 0 && phone.length > 0;
     if (role === 'patient') {
@@ -23,7 +23,7 @@ export default function SignupScreen({ navigation }: any) {
 
   const canContinue = isFormValid();
 
-  // --- NOUVELLE FONCTION : ON PASSE À L'ÉTAPE DU MOT DE PASSE ---
+  
   const handleSignup = () => {
     const userInfo = {
       nom,
@@ -36,7 +36,7 @@ export default function SignupScreen({ navigation }: any) {
       specialite: role === 'medecin' ? specialite : null,
     };
 
-    // On envoie les données vers SetPasswordScreen
+    
     navigation.navigate('SetPassword', { userInfo: userInfo });
   };
 
@@ -94,7 +94,7 @@ export default function SignupScreen({ navigation }: any) {
 
         <TouchableOpacity 
           style={[styles.mainButton, !canContinue && styles.disabledButton]} 
-          onPress={handleSignup} // Appelle maintenant la navigation
+          onPress={handleSignup} 
           disabled={!canContinue}
         >
           <Text style={styles.buttonText}>Continuer en tant que {role}</Text>

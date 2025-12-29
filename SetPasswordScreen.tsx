@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, Alert, ActivityIndicator } from 'react-native';
 
 export default function SetPasswordScreen({ route, navigation }: any) {
-  // 1. PROTECTION : On récupère route.params de manière sécurisée
+ 
   const params = route?.params || {};
   const userInfo = params?.userInfo; 
 
@@ -10,7 +10,7 @@ export default function SetPasswordScreen({ route, navigation }: any) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // 2. SÉCURITÉ : Si userInfo n'existe pas, on affiche un message d'erreur au lieu de crasher
+ 
   if (!userInfo) {
     return (
       <SafeAreaView style={styles.container}>
@@ -71,7 +71,7 @@ export default function SetPasswordScreen({ route, navigation }: any) {
       <View style={styles.inner}>
         <Text style={styles.headerTitle}>Dernière étape</Text>
         
-        {/* On utilise le ?. pour afficher le prénom sans risque de crash */}
+        
         <Text style={styles.instructions}>
           Bonjour {userInfo?.prenom || 'Utilisateur'}, créez votre mot de passe pour {userInfo?.email}.
         </Text>

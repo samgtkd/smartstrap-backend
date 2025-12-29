@@ -2,26 +2,25 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Alert } from 'react-native';
 
 export default function LoginScreen({ navigation }: any) {
-  // --- ÉTATS (STATES) ---
+ 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
-  // --- FONCTION DE CONNEXION ---
+ 
   const handleLogin = async () => {
-    // 1. VÉRIFICATION DES CHAMPS VIDES
-    // On utilise .trim() pour ignorer les espaces accidentels
+   
+   
     if (!email.trim() || !password.trim()) {
       Alert.alert(
         "Champs incomplets", 
         "Veuillez remplir tous les champs (Email et Mot de passe) avant de continuer."
       );
-      return; // On arrête la fonction ici
+      return; 
     }
 
     try {
-      // NOTE : Utilise 'http://10.0.2.2:5000' si tu es sur émulateur Android
-      // Utilise ton IP locale (ex: 192.168.1.82) uniquement si tu testes sur un vrai téléphone
+     
       const SERVER_URL = 'http://192.168.1.82:5000/api/auth/login';
 
       const response = await fetch(SERVER_URL, {
